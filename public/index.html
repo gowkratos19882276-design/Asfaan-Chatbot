@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Medical Chatbot</title>
+  <title> AI MedicaL Chatbot</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -26,6 +26,17 @@
       --danger: #ef4444;
       --border: rgba(255, 255, 255, 0.15);
     }
+    /* Dark theme overrides */
+    body[data-theme="dark"] {
+      --bg: #0f2230;
+      --bg-top: #0a1a25;
+      --panel: rgba(0, 0, 0, 0.35);
+      --panel-2: rgba(0, 0, 0, 0.5);
+      --text: #e9f4f2;
+      --text-soft: #cfe7e3;
+      --muted: #b4d6d0;
+      --border: rgba(255,255,255,0.12);
+    }
     * { box-sizing: border-box; }
     body {
       margin: 0; 
@@ -34,20 +45,24 @@
       font-family: Inter, Roboto, 'Open Sans', system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif;
       min-height: 100vh; display: grid; place-items: center; padding: 24px;
     }
-    .app {
-      width: 100%; max-width: 900px; display: grid; grid-template-columns: 360px 1fr; gap: 16px;
-    }
-    @media (max-width: 860px) { .app { grid-template-columns: 1fr; } }
-    .sidebar { background: var(--panel); backdrop-filter: blur(10px); border: 1px solid var(--border); border-radius: 16px; padding: 22px; box-shadow: 0 12px 30px rgba(0,0,0,0.15); display: flex; flex-direction: column; align-items: center; gap: 10px; }
-    .title { font-weight: 800; font-size: 20px; margin: 0 0 8px; text-align: center; letter-spacing: 0.3px; }
-    .desc { color: var(--text-soft); font-size: 14px; margin: 0 0 16px; }
+    .app { width: 100%; max-width: 900px; }
+    /* Top bar */
+    .topbar { width: 100%; max-width: 900px; display:flex; align-items:center; justify-content:center; position: relative; margin-bottom: 14px; }
+    .brand { display:flex; justify-content:center; align-items:center; }
+    .brand img { height: 48px; width:auto; display:block; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.15)); }
+    .top-actions { position:absolute; right:0; display:flex; gap:8px; }
+    .icon-toggle { position:absolute; left:0; display:flex; gap:8px; }
+    .icon-btn { width:40px; height:40px; border-radius:10px; border:1px solid var(--border); background: rgba(255,255,255,0.1); color: var(--text); display:grid; place-items:center; cursor:pointer; }
+    .icon-btn:hover { background: rgba(255,255,255,0.15); }
+    /* Drawer */
+    .drawer { position: fixed; top: 20px; left: 20px; width: 320px; max-width: calc(100% - 40px); background: var(--panel); border:1px solid var(--border); border-radius:16px; padding:16px; box-shadow: 0 18px 40px rgba(0,0,0,0.3); transform: translateX(-120%); transition: transform .25s ease; z-index: 50; backdrop-filter: blur(10px); }
+    .drawer.open { transform: translateX(0); }
+    .title { font-weight: 800; font-size: 18px; margin: 0 0 8px; text-align: left; letter-spacing: 0.3px; }
+    .desc { color: var(--text-soft); font-size: 13px; margin: 0 0 12px; }
     .card { background: rgba(255, 255, 255, 0.06); border: 1px solid var(--border); padding: 12px; border-radius: 12px; margin-bottom: 12px; }
     .chip { display: inline-block; padding: 4px 10px; border-radius: 999px; background: var(--accent); color: white; font-size: 12px; font-weight: 600; }
 
-    .chat {
-      background: var(--panel); backdrop-filter: blur(10px); border: 1px solid var(--border); border-radius: 16px;
-      display: grid; grid-template-rows: 1fr auto; height: 80vh; min-height: 540px; overflow: hidden;
-    }
+    .chat { background: var(--panel); backdrop-filter: blur(10px); border: 1px solid var(--border); border-radius: 16px; display: grid; grid-template-rows: 1fr auto; height: 80vh; min-height: 540px; overflow: hidden; }
     .messages { padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
     .msg { display: flex; gap: 12px; max-width: 85%; }
     .msg.bot { align-self: flex-start; }
@@ -87,36 +102,49 @@
     }
     @keyframes pulse {
       0% { box-shadow: 0 0 0 0 rgba(71,194,178,0.5); }
+      70% { box-shadow: 0 0 0 12px rgba(71,194,178,0); }
       100% { box-shadow: 0 0 0 0 rgba(71,194,178,0); }
     }
   </style>
+</head>
 <body>
-    <div class="app">
-    <div class="sidebar">
-      <div class="logo-wrap" style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-        <img src="/images/Screenshot 2025-09-29 110324.png" alt="Company Logo" style="height:36px;width:auto;display:block;" />
-      </div>
-      <div class="title">Medical Chatbot</div>
-      <p class="desc">Book appointments or ask general medical questions powered by a local AI model.</p>
-      <div class="card">
-        <div class="chip">How it works</div>
-        <ul>
-          <li>Choose Book Appointment or General Chat</li>
-          <li>For booking: pick doctor → date → time → enter email</li>
-          <li>We send confirmation by email</li>
-        </ul>
-      </div>
-      <div class="card">
-        <div class="chip">Voice Receptionist</div>
-        <p style="margin:8px 0 10px;color:var(--muted);font-size:13px;">Talk to our AI receptionist powered by Vapi. Click Start to begin.</p>
-        <div style="display:flex; gap:8px;">
-          <button id="startCall" class="btn primary">🎤 Start Call</button>
-          <button id="endCall" class="btn" style="display:none;">⏹ End</button>
-        </div>
-        <audio id="remoteAudio" autoplay playsinline style="width:100%; margin-top:8px;"></audio>
-      </div>
+  <div class="topbar">
+    <div class="icon-toggle">
+      <button id="sidebarToggle" class="icon-btn" title="Menu">☰</button>
     </div>
+    <div class="brand">
+      <img src="/images/Screenshot 2025-09-29 110324.png" alt="Company Logo" />
+    </div>
+    <div class="top-actions">
+      <button id="startCall" class="btn primary">🎤 Start Call</button>
+      <button id="endCall" class="btn" style="display:none;">⏹ End</button>
+    </div>
+  </div>
 
+  <!-- Drawer with extra features -->
+  <div id="sidebarDrawer" class="drawer" aria-hidden="true">
+    <div class="title">Menu</div>
+    <div class="card">
+      <div class="chip">How it works</div>
+      <ul style="margin:8px 0 0 16px; font-size: 13px; color: var(--text-soft);">
+        <li>Choose Book Appointment or General Chat</li>
+        <li>For booking: pick doctor → date → time → enter email</li>
+        <li>Confirmation email will be sent</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="chip">Reports</div>
+      <p style="margin:8px 0 10px;color:var(--muted);font-size:13px;">Download the current chat transcript as a report.</p>
+      <button id="downloadReport" class="btn success" style="width:100%;">⬇️ Download Report</button>
+    </div>
+    <div class="card">
+      <div class="chip">Appearance</div>
+      <button id="toggleTheme" class="btn" style="width:100%;">🌙 Toggle Dark Theme</button>
+    </div>
+    <audio id="remoteAudio" autoplay playsinline style="width:100%; margin-top:8px; display:none;"></audio>
+  </div>
+
+  <div class="app">
     <div class="chat">
       <div id="messages" class="messages"></div>
       <div class="inputbar">
@@ -126,6 +154,41 @@
       </div>
     </div>
   </div>
+
+  <!-- Drawer + Theme toggles -->
+  <script>
+    (function(){
+      const body = document.body;
+      const drawer = document.getElementById('sidebarDrawer');
+      const toggleBtn = document.getElementById('sidebarToggle');
+      const themeBtn = document.getElementById('toggleTheme');
+
+      // Restore theme
+      try {
+        const saved = localStorage.getItem('theme');
+        if (saved === 'dark') body.setAttribute('data-theme','dark');
+      } catch(_){}
+
+      if (toggleBtn && drawer) {
+        toggleBtn.addEventListener('click', () => {
+          drawer.classList.toggle('open');
+          drawer.setAttribute('aria-hidden', drawer.classList.contains('open') ? 'false' : 'true');
+        });
+      }
+      if (themeBtn) {
+        themeBtn.addEventListener('click', () => {
+          const dark = body.getAttribute('data-theme') === 'dark';
+          if (dark) {
+            body.removeAttribute('data-theme');
+            try { localStorage.setItem('theme','light'); } catch(_){ }
+          } else {
+            body.setAttribute('data-theme','dark');
+            try { localStorage.setItem('theme','dark'); } catch(_){ }
+          }
+        });
+      }
+    })();
+  </script>
 
   <!-- Vapi Web SDK via ESM CDN (browser-compatible). We expose it as window.Vapi -->
   <script type="module">
