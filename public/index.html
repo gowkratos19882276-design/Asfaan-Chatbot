@@ -75,6 +75,7 @@
     .user .bubble { background: var(--user); border-color: var(--primary); }
     .btns { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
     .btn { background: rgba(255, 255, 255, 0.08); color: var(--text); border: 1px solid var(--border); padding: 10px 14px; border-radius: 12px; cursor: pointer; font-size: 14px; font-weight: 600; transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease; box-shadow: 0 2px 0 rgba(0,0,0,0.08); }
+    .btn .icon { display: inline-block; margin-right: 8px; line-height: 0; }
     .btn:hover { background: rgba(255, 255, 255, 0.14); border-color: rgba(255, 255, 255, 0.25); box-shadow: 0 6px 16px rgba(0,0,0,0.15); transform: translateY(-1px); }
     .btn:active { transform: translateY(0); box-shadow: 0 2px 0 rgba(0,0,0,0.12); }
     .btn.primary { background: var(--primary); border: none; color: white; font-weight: 600; }
@@ -116,7 +117,7 @@
       <img src="/images/Screenshot 2025-09-29 110324.png" alt="Company Logo" />
     </div>
     <div class="top-actions">
-      <button id="startCall" class="btn primary">🎤 Start Call</button>
+      <button id="startCall" class="btn primary"><span class="icon" aria-hidden="true">📞</span>Start Call</button>
       <button id="endCall" class="btn" style="display:none;">⏹ End</button>
     </div>
   </div>
